@@ -1,0 +1,58 @@
+/*
+ Data Exploration from public Data set
+ Data used from:- https://en.wikipedia.org/ and https://ourworldindata.org/
+Skills used: Execel, My SQL, Joins, CTE's, Temp Tables, Windows Functions, Aggregate Functions, Creating Views in Tableau , Converting Data Types
+*/
+
+-- Updating data (.csv) file in My SQL server Data base under new Connection
+-- Checking and validating the updated data
+
+SELECT * limit 10000
+FROM data_2020.`data 2020`; 
+
+
+-- Updating another table that keeps record of the Country Continent-Wise
+SELECT * limit 10000
+FROM data_2020.`get continent`;
+
+
+
+/* From the list of data in table data_2020 where the list of all countries in the world containing  Population, Cases per day for and Death Count per day for Year 2020
+Segregated the long list of data and arranging the data with Distinct Country and Total Case and Total Death Count FY-2020 for each country. */
+
+
+SELECT DISTINCT CODE, COUNTRY, POP, SUM(TC) AS TOTAL_CASES, 
+COUNT(TD) AS TOTAL_DEATH_COUNT
+FROM data_2020.`data 2020`
+group by GDPCAP;
+
+
+
+-- Cleaning the data containing the list of Countries Continent-Wise. Cleaning the Data, removing the incorrect enteries and nulls
+
+SELECT distinct location, continent FROM data_2020.`get continent`
+WHERE (continent is not null|| continent != ' ') && location!= "World" 
+&& location != 'South America' 
+&& location != 'North America' 
+&& location != 'Africa'
+&& location != 'Europe' && location != 'European Union'
+&& location != 'International'
+&& location != 'Oceania';
+
+
+
+-- Using Inner Join to connect two tables to get the file in single sheet
+
+SELECT * limit 5000
+ FROM data_2020.`data 2020` 
+JOIN data_2020.`get continent` 
+WHERE (continent is not null|| continent != ' ') && location!= "World" 
+&& location != 'South America' 
+&& location != 'North America' 
+&& location != 'Africa'
+&& location != 'Europe' && location != 'European Union'
+&& location != 'International'
+&& location != 'Oceania';
+
+/* Exported the table in (.csv) format, converted the data in (.xls) file to upload the Excel file in Tableau for Data Visualization*/
+
